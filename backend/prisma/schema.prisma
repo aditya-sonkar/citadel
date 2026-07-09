@@ -1,0 +1,169 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum PolicyType {
+  MANAGED
+  INLINE
+}
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  isRoot       Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  memberships  UserGroupMembership[]
+  policies     UserPolicyAttachment[]
+  boundary     UserBoundary?
+  sessions     Session[]
+  auditlogs    AuditLog[]
+
+  @@map("users")
+}
+
+model Group {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  memberships UserGroupMembership[]
+  policies    GroupPolicyAttachment[]
+
+  @@map("groups")
+}
+
+model Policy {
+  id          String     @id @default(uuid())
+  name        String     @unique
+  description String?
+  type        PolicyType
+  statements  Json       
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  groupAttachments GroupPolicyAttachment[]
+  userAttachments  UserPolicyAttachment[]
+  boundaries       UserBoundary[]
+
+  @@map("policies")
+}
+
+model UserGroupMembership {
+  userId  String
+  groupId String
+  addedAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@id([userId, groupId])
+  @@index([userId])
+  @@index([groupId])
+  @@map("user_group_memberships")
+}
+
+model GroupPolicyAttachment {
+  groupId    String
+  policyId   String
+  attachedAt DateTime @default(now())
+
+  group  Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  policy Policy @relation(fields: [policyId], references: [id], onDelete: Cascade)
+
+  @@id([groupId, policyId])
+  @@index([groupId])
+  @@index([policyId])
+  @@map("group_policy_attachments")
+}
+
+model UserPolicyAttachment {
+  userId     String
+  policyId   String
+  attachedAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  policy Policy @relation(fields: [policyId], references: [id], onDelete: Cascade)
+
+  @@id([userId, policyId])
+  @@index([userId])
+  @@index([policyId])
+  @@map("user_policy_attachments")
+}
+
+model UserBoundary {
+  userId   String   @id
+  policyId String
+  setAt    DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  policy Policy @relation(fields: [policyId], references: [id], onDelete: Cascade)
+
+  @@index([policyId])
+  @@map("user_boundaries")
+}
+
+model Session {
+  id               String   @id @default(uuid())
+  userId           String
+  refreshTokenHash String   @unique
+  userAgent        String?
+  ipAddress        String?
+  expiresAt        DateTime
+  createdAt        DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+enum AuditEffect {
+  Allow
+  Deny
+}
+
+enum AuditDecision {
+  ROOT_BYPASS
+  ALLOW_MATCH
+  EXPLICIT_DENY
+  BOUNDARY_DENY
+  DELEGATION_DENY
+  NO_MATCH
+}
+
+model AuditLog {
+  id             String         @id @default(uuid())
+  timestamp      DateTime       @default(now())
+  userId         String?        // actorId
+  userEmail      String?        // actorEmail
+  action         String
+  targetResource String
+  targetType     String?        // e.g. "group", "user", "policy"
+  targetId       String?        // entity UUID
+  effect         AuditEffect
+  decision       AuditDecision?
+  ipAddress      String?
+  userAgent      String?
+  metadata       Json?          // Stores payloads and secondary details
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([action])
+  @@index([effect])
+  @@index([decision])
+  @@index([timestamp(sort: Desc)])
+  @@index([userId, timestamp(sort: Desc)])
+  @@index([targetId])
+  @@index([targetType, targetId])
+  @@map("audit_logs")
+}

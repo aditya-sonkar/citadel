@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: citadel-backend
+    env: docker
+    dockerfilepath: Dockerfile
+    dockercontext: .
+    rootDirectory: backend
+    plan: free
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: CORS_ORIGIN
+        sync: false

@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Inter", "Geist", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", "Inter", "Geist", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-mono: "JetBrains Mono", "SF Mono", "IBM Plex Mono", ui-monospace, monospace;
+  --color-brand-cyan: #00f0ff;
+  --color-brand-purple: #8b5cf6;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Keyframes ──────────────────────────────────────────────────────────────*/
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes smoothSlideUp {
+  0%   { transform: translateY(100%); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ─── Utilities ──────────────────────────────────────────────────────────────*/
+
+.animate-fade-in    { animation: fadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.animate-fade-in-up { opacity: 0; animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.animation-delay-100 { animation-delay: 150ms; }
+.animation-delay-200 { animation-delay: 300ms; }
+.animation-delay-300 { animation-delay: 450ms; }
+
+.animate-smooth-slide { animation: smoothSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.animate-marquee      { animation: marquee 25s linear infinite; }
+
+/* ─── Dot Grid Background (Lama Lama style) ─────────────────────────────────*/
+
+.dot-grid {
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────────────*/
+
+::-webkit-scrollbar       { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
