@@ -26,7 +26,7 @@ Citadel is a self-administered Identity and Access Management (IAM) system. It f
 
 ## Screenshots
 
-*(Add your screenshots to the `public/screenshots/` folder and they will appear here)*
+
 | Public Landing Page | Admin Dashboard Home |
 | :---: | :---: |
 | ![Landing Page](./frontend/public/screenshots/landing.png?v=2) | ![Admin Dashboard](./frontend/public/screenshots/admin-dashboard.png) |
