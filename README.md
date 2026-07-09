@@ -11,12 +11,12 @@
 ![Render](https://img.shields.io/badge/Render-Backend-46a2f1?style=flat-square&logo=render)
 ![License MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)
 
-Citadel is a comprehensive, self-administered Identity and Access Management (IAM) system modeled directly after AWS IAM. It provides a robust evaluation engine that handles identity policies, group policies, explicit denies, implicit denies, and hard permission boundaries. The entire system is self-administered, meaning the IAM management routes themselves are protected by the same IAM middleware, complete with strict delegation bypass prevention to stop privilege escalation.
+Citadel is a self-administered Identity and Access Management (IAM) system. It features a robust policy evaluation engine that handles identity policies, group policies, explicit denies, implicit denies, and permission boundaries. The management routes are protected by the same policy middleware, preventing privilege escalation through delegation bypass control.
 
 ## Key Features
 
-- **AWS-Style Policy Evaluation:** Native, declarative JSON policy matching supporting `Effect`, `Action`, and `Resource` (including wildcard `*` matching).
-- **Self-Administered IAM Middleware:** Management routes are guarded by the engine itself. Admin actions are validated using active policies.
+- **Fine-Grained JSON Policy Engine:** Native, declarative JSON policy matching supporting `Effect`, `Action`, and `Resource` (including wildcard `*` matching).
+- **Self-Administered Middleware:** Management routes are guarded by the engine itself. Admin actions are validated using active policies.
 - **Permission Boundaries:** Restrict the maximum permissions a user can possibly possess, overriding any attached identity or group policies.
 - **Interactive Policy Simulator:** Test specific user requests (Action, Resource) in real time to visualize the authorization path, matching statements, and decisions.
 - **Audit Logs & Observability:** Real-time logging of user activity, system actions, resources targeted, and policy decisions.
