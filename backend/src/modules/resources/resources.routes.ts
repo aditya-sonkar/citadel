@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { authMiddleware } from '../../core/middlewares/auth.middleware';
 import { authorize } from '../../core/middlewares/authorize.middleware';
-import { ok } from './resources.controller';
+import { ok, getSettings, updateSettings } from './resources.controller';
 
 const router = Router();
 
@@ -20,8 +20,8 @@ router.patch('/alerts/:id/acknowledge', authMiddleware, authorize('alerts:Acknow
 router.delete('/alerts/:id', authMiddleware, authorize('alerts:Delete'), ok);
 
 // --- Resource: settings ---
-router.get('/settings', authMiddleware, authorize('settings:Read'), ok);
-router.put('/settings', authMiddleware, authorize('settings:Update'), ok);
+router.get('/settings', authMiddleware, authorize('settings:Read'), getSettings);
+router.put('/settings', authMiddleware, authorize('settings:Update'), updateSettings);
 
 // --- Resource: audit ---
 router.get('/audit', authMiddleware, authorize('audit:List'), ok);

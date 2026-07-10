@@ -48,3 +48,11 @@ export const me = asyncHandler(async (req: Request, res: Response) => {
     .status(HTTP_STATUS.OK)
     .json(new ApiResponse(true, 'Profile retrieved successfully', profile));
 });
+
+export const resetPassword = asyncHandler(async (req: Request, res: Response) => {
+  const { email, newPassword } = req.body;
+  await authService.resetPassword(email, newPassword);
+  res
+    .status(HTTP_STATUS.OK)
+    .json(new ApiResponse(true, 'Password reset successfully', null));
+});

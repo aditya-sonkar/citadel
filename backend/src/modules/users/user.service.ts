@@ -6,6 +6,8 @@ import { verifyDelegation } from '../../iam/delegation';
 import { evaluatePolicies } from '../../iam/evaluator';
 import { PolicyType, AuditEffect, AuditDecision } from '@prisma/client';
 import * as auditService from '../audit/audit.service';
+import { comparePassword, hashPassword } from '../../core/utils/hash';
+import { validatePasswordAgainstPolicy } from '../resources/settings.service';
 
 // System-managed policy names (cannot be deleted by non-root users)
 const SYSTEM_POLICIES = ['ReadOnlyAccess', 'ReportsFullAccess'];
@@ -588,4 +590,27 @@ export const deleteUserPolicy = async (
     decision: AuditDecision.ALLOW_MATCH,
     metadata: { userId, policyName },
   });
+};
+
+export const changePassword = async (userId: string, currentPassword: string, newPassword: string) => {
+  const user = await userRepository.findById(userId);
+  if (!user) {
+    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'User not found');
+  }
+
+  // Verify current password
+  const isPasswordValid = await comparePassword(currentPassword, user.passwordHash);
+  if (!isPasswordValid) {
+    throw new ApiError(HTTP_STATUS.UNAUTHORIZED, 'Incorrect current password');
+  }
+
+  // Validate new password against policy
+  const validation = validatePasswordAgainstPolicy(newPassword);
+  if (!validation.isValid) {
+    throw new ApiError(HTTP_STATUS.BAD_REQUEST, validation.errors.join('. '));
+  }
+
+  // Hash and update
+  const passwordHash = await hashPassword(newPassword);
+  await userRepository.updateUserPassword(userId, passwordHash);
 };

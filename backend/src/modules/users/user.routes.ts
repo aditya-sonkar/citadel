@@ -12,6 +12,7 @@ import {
   listUsersQuerySchema,
   putUserPolicySchema,
   deleteUserPolicySchema,
+  changePasswordSchema,
 } from './user.validator';
 
 const router = Router();
@@ -19,6 +20,7 @@ const router = Router();
 // --- Standard User routes ---
 router.get('/me', authMiddleware, userController.getProfile);
 router.put('/me', authMiddleware, validate(updateProfileSchema), userController.updateProfile);
+router.put('/me/password', authMiddleware, validate(changePasswordSchema), userController.changePassword);
 
 export default router;
 

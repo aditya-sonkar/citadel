@@ -67,3 +67,10 @@ export const deleteUserPolicySchema = z.object({
     policyName: z.string().min(3, 'Policy name must be at least 3 characters').max(100, 'Policy name cannot exceed 100 characters').regex(/^[\w\s+=,.@\-]+$/, 'Policy name can only contain alphanumeric characters, spaces, and +=,.@-_'),
   }),
 });
+
+export const changePasswordSchema = z.object({
+  body: z.object({
+    currentPassword: z.string().min(1, 'Current password is required'),
+    newPassword: z.string().min(1, 'New password is required'),
+  }),
+});

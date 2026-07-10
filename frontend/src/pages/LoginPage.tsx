@@ -15,6 +15,15 @@ const LoginPage: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
+  // Reset password states
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const [resetNewPassword, setResetNewPassword] = useState('');
+  const [resetConfirmPassword, setResetConfirmPassword] = useState('');
+  const [resetError, setResetError] = useState<string | null>(null);
+  const [resetSuccess, setResetSuccess] = useState<string | null>(null);
+  const [isResetLoading, setIsResetLoading] = useState(false);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -34,6 +43,40 @@ const LoginPage: React.FC = () => {
       setError(message);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleResetPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setResetError(null);
+    setResetSuccess(null);
+
+    if (resetNewPassword !== resetConfirmPassword) {
+      setResetError('Passwords do not match.');
+      return;
+    }
+
+    setIsResetLoading(true);
+    try {
+      const response = await api.post('/auth/reset-password', {
+        email: resetEmail,
+        newPassword: resetNewPassword,
+      });
+      if (response.data.success) {
+        setResetSuccess('Password reset successfully! You can now log in.');
+        setResetEmail('');
+        setResetNewPassword('');
+        setResetConfirmPassword('');
+        setTimeout(() => {
+          setIsForgotPassword(false);
+          setResetSuccess(null);
+        }, 2000);
+      }
+    } catch (err: any) {
+      const message = err.response?.data?.message || err.message || 'Failed to reset password.';
+      setResetError(message);
+    } finally {
+      setIsResetLoading(false);
     }
   };
 
@@ -85,83 +128,198 @@ const LoginPage: React.FC = () => {
           <div className="flex flex-col items-center mb-8 text-center">
             <span className="text-[9px] font-mono tracking-[0.2em] text-black/40 dark:text-white/30 uppercase mb-2">SECURE PORTAL</span>
             <h2 className="font-extrabold uppercase tracking-tight text-2xl md:text-3xl text-black dark:text-white">
-              Sign In
+              {isForgotPassword ? 'Reset Password' : 'Sign In'}
             </h2>
           </div>
 
-          {error && (
+          {/* Alerts */}
+          {!isForgotPassword && error && (
             <div className="mb-6 p-3 text-[11px] font-mono text-rose-600 dark:text-rose-400 bg-rose-500/10 border border-rose-500/20 rounded-sm leading-relaxed text-left flex items-start gap-2">
               <svg className="w-4 h-4 mt-0.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
               <span>{error}</span>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-5 text-left">
-            <div className="flex flex-col gap-2">
-              <label htmlFor="email" className="text-[9px] font-mono tracking-widest text-black/50 dark:text-white/40 uppercase">Email Address</label>
-              <input
-                id="email"
-                type="email"
-                required
-                disabled={isLoading}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                className="w-full px-3 py-2.5 text-xs bg-transparent border border-black/10 dark:border-white/[0.08] focus:border-black dark:focus:border-white rounded-sm text-black dark:text-white placeholder-black/35 dark:placeholder-white/20 focus:outline-none focus:ring-0 transition-all font-mono"
-              />
+          {isForgotPassword && resetError && (
+            <div className="mb-6 p-3 text-[11px] font-mono text-rose-600 dark:text-rose-400 bg-rose-500/10 border border-rose-500/20 rounded-sm leading-relaxed text-left flex items-start gap-2">
+              <svg className="w-4 h-4 mt-0.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+              <span>{resetError}</span>
             </div>
+          )}
 
-            <div className="flex flex-col gap-2">
-              <div className="flex justify-between items-center">
-                <label htmlFor="password" className="text-[9px] font-mono tracking-widest text-black/50 dark:text-white/40 uppercase">Password</label>
-                <a href="#forgot" className="text-[9px] font-mono tracking-widest text-black/40 dark:text-white/30 uppercase hover:text-black dark:hover:text-white transition-colors">FORGOT PASSWORD?</a>
-              </div>
-              <div className="relative">
+          {isForgotPassword && resetSuccess && (
+            <div className="mb-6 p-3 text-[11px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-sm leading-relaxed text-left flex items-start gap-2">
+              <svg className="w-4 h-4 mt-0.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v2"/><path d="M12 14h.01"/></svg>
+              <span>{resetSuccess}</span>
+            </div>
+          )}
+
+          {!isForgotPassword ? (
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5 text-left">
+              <div className="flex flex-col gap-2">
+                <label htmlFor="email" className="text-[9px] font-mono tracking-widest text-black/50 dark:text-white/40 uppercase">Email Address</label>
                 <input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
+                  id="email"
+                  type="email"
                   required
                   disabled={isLoading}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
-                  className="w-full px-3 pr-10 py-2.5 text-xs bg-transparent border border-black/10 dark:border-white/[0.08] focus:border-black dark:focus:border-white rounded-sm text-black dark:text-white placeholder-black/35 dark:placeholder-white/20 focus:outline-none focus:ring-0 transition-all font-mono"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  className="w-full px-3 py-2.5 text-xs bg-transparent border border-black/10 dark:border-white/[0.08] focus:border-black dark:focus:border-white rounded-sm text-black dark:text-white placeholder-black/35 dark:placeholder-white/20 focus:outline-none focus:ring-0 transition-all font-mono"
                 />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <div className="flex justify-between items-center">
+                  <label htmlFor="password" className="text-[9px] font-mono tracking-widest text-black/50 dark:text-white/40 uppercase">Password</label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsForgotPassword(true);
+                      setResetError(null);
+                      setResetSuccess(null);
+                    }}
+                    className="text-[9px] font-mono tracking-widest text-black/40 dark:text-white/30 uppercase hover:text-black dark:hover:text-white transition-colors cursor-pointer"
+                  >
+                    FORGOT PASSWORD?
+                  </button>
+                </div>
+                <div className="relative">
+                  <input
+                    id="password"
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    disabled={isLoading}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Enter your password"
+                    className="w-full px-3 pr-10 py-2.5 text-xs bg-transparent border border-black/10 dark:border-white/[0.08] focus:border-black dark:focus:border-white rounded-sm text-black dark:text-white placeholder-black/35 dark:placeholder-white/20 focus:outline-none focus:ring-0 transition-all font-mono"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(prev => !prev)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-black/45 dark:text-white/40 hover:text-black dark:hover:text-white transition-colors"
+                    tabIndex={-1}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showPassword ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                      </svg>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="mt-2 w-full flex items-center justify-center py-3 border border-black dark:border-white text-[10px] font-mono tracking-widest text-white dark:text-black bg-black dark:bg-white rounded-sm hover:bg-transparent dark:hover:bg-transparent hover:text-black dark:hover:text-white transition-colors cursor-pointer uppercase"
+              >
+                {isLoading ? 'SIGNING IN...' : 'SIGN IN'}
+              </button>
+            </form>
+          ) : (
+            <form onSubmit={handleResetPassword} className="flex flex-col gap-5 text-left animate-fade-in">
+              <div className="flex flex-col gap-2">
+                <label htmlFor="resetEmail" className="text-[9px] font-mono tracking-widest text-black/50 dark:text-white/40 uppercase">Email Address</label>
+                <input
+                  id="resetEmail"
+                  type="email"
+                  required
+                  disabled={isResetLoading}
+                  className="w-full px-3 py-2.5 text-xs bg-transparent border border-black/10 dark:border-white/[0.08] focus:border-black dark:focus:border-white rounded-sm text-black dark:text-white placeholder-black/35 dark:placeholder-white/20 focus:outline-none focus:ring-0 transition-all font-mono"
+                  value={resetEmail}
+                  onChange={e => setResetEmail(e.target.value)}
+                  placeholder="Enter registered email"
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label htmlFor="resetNewPassword" className="text-[9px] font-mono tracking-widest text-black/50 dark:text-white/40 uppercase">New Password</label>
+                <input
+                  id="resetNewPassword"
+                  type="password"
+                  required
+                  disabled={isResetLoading}
+                  className="w-full px-3 py-2.5 text-xs bg-transparent border border-black/10 dark:border-white/[0.08] focus:border-black dark:focus:border-white rounded-sm text-black dark:text-white placeholder-black/35 dark:placeholder-white/20 focus:outline-none focus:ring-0 transition-all font-mono"
+                  value={resetNewPassword}
+                  onChange={e => setResetNewPassword(e.target.value)}
+                  placeholder="Enter new password"
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label htmlFor="resetConfirmPassword" className="text-[9px] font-mono tracking-widest text-black/50 dark:text-white/40 uppercase">Confirm New Password</label>
+                <input
+                  id="resetConfirmPassword"
+                  type="password"
+                  required
+                  disabled={isResetLoading}
+                  className="w-full px-3 py-2.5 text-xs bg-transparent border border-black/10 dark:border-white/[0.08] focus:border-black dark:focus:border-white rounded-sm text-black dark:text-white placeholder-black/35 dark:placeholder-white/20 focus:outline-none focus:ring-0 transition-all font-mono"
+                  value={resetConfirmPassword}
+                  onChange={e => setResetConfirmPassword(e.target.value)}
+                  placeholder="Confirm new password"
+                />
+              </div>
+
+              <div className="flex gap-3 mt-2">
                 <button
                   type="button"
-                  onClick={() => setShowPassword(prev => !prev)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-black/45 dark:text-white/40 hover:text-black dark:hover:text-white transition-colors"
-                  tabIndex={-1}
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  disabled={isResetLoading}
+                  onClick={() => {
+                    setIsForgotPassword(false);
+                    setResetEmail('');
+                    setResetNewPassword('');
+                    setResetConfirmPassword('');
+                    setResetError(null);
+                    setResetSuccess(null);
+                  }}
+                  className="w-1/2 py-3 border border-black/20 dark:border-white/20 text-[10px] font-mono tracking-widest text-black dark:text-white rounded-sm hover:bg-black/5 dark:hover:bg-white/5 transition-colors uppercase disabled:opacity-50"
                 >
-                  {showPassword ? (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
-                    </svg>
-                  ) : (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                  )}
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isResetLoading}
+                  className="w-1/2 py-3 border border-black dark:border-white text-[10px] font-mono tracking-widest text-white dark:text-black bg-black dark:bg-white rounded-sm hover:bg-transparent dark:hover:bg-transparent hover:text-black dark:hover:text-white transition-colors cursor-pointer uppercase disabled:opacity-50"
+                >
+                  {isResetLoading ? 'Resetting...' : 'Submit'}
                 </button>
               </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="mt-2 w-full flex items-center justify-center py-3 border border-black dark:border-white text-[10px] font-mono tracking-widest text-white dark:text-black bg-black dark:bg-white rounded-sm hover:bg-transparent dark:hover:bg-transparent hover:text-black dark:hover:text-white transition-colors cursor-pointer uppercase"
-            >
-              {isLoading ? 'SIGNING IN...' : 'SIGN IN'}
-            </button>
-          </form>
+            </form>
+          )}
 
           <div className="mt-8 text-center text-[10px] font-mono tracking-widest uppercase text-black/40 dark:text-white/30">
-            Don't have an account?{' '}
-            <Link to="/signup" className="text-black dark:text-white font-bold hover:underline transition-colors">
-              CREATE ACCOUNT
-            </Link>
+            {!isForgotPassword ? (
+              <>
+                Don't have an account?{' '}
+                <Link to="/signup" className="text-black dark:text-white font-bold hover:underline transition-colors">
+                  CREATE ACCOUNT
+                </Link>
+              </>
+            ) : (
+              <button
+                type="button"
+                onClick={() => {
+                  setIsForgotPassword(false);
+                  setResetEmail('');
+                  setResetNewPassword('');
+                  setResetConfirmPassword('');
+                  setResetError(null);
+                  setResetSuccess(null);
+                }}
+                className="text-black dark:text-white font-bold hover:underline transition-colors uppercase cursor-pointer"
+              >
+                Back to Sign In
+              </button>
+            )}
           </div>
         </motion.div>
       </main>

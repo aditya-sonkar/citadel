@@ -145,3 +145,10 @@ export const deleteUserBoundary = async (userId: string) => {
     where: { userId },
   });
 };
+
+export const updateUserPassword = async (id: string, passwordHash: string) => {
+  return prisma.user.update({
+    where: { id },
+    data: { passwordHash },
+  });
+};

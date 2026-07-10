@@ -135,3 +135,12 @@ export const deleteUserPolicy = asyncHandler(async (req: Request, res: Response)
     new ApiResponse(true, 'User inline policy deleted successfully', null)
   );
 });
+
+export const changePassword = asyncHandler(async (req: Request, res: Response) => {
+  const userId = req.user!.userId;
+  const { currentPassword, newPassword } = req.body;
+  await userService.changePassword(userId, currentPassword, newPassword);
+  res.status(HTTP_STATUS.OK).json(
+    new ApiResponse(true, 'Password updated successfully', null)
+  );
+});

@@ -3,6 +3,8 @@ import { HTTP_STATUS } from '../../core/utils/constants';
 import * as authRepository from './auth.repository';
 import * as sessionService from '../sessions/session.service';
 import { hashPassword, comparePassword } from '../../core/utils/hash';
+import { prisma } from '../../core/database/prisma';
+import { validatePasswordAgainstPolicy } from '../resources/settings.service';
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -48,6 +50,11 @@ export const register = async (
   const existingUser = await authRepository.findByEmail(data.email);
   if (existingUser) {
     throw new ApiError(HTTP_STATUS.CONFLICT, 'Resource already exists');
+  }
+
+  const validation = validatePasswordAgainstPolicy(data.password);
+  if (!validation.isValid) {
+    throw new ApiError(HTTP_STATUS.BAD_REQUEST, validation.errors.join('. '));
   }
 
   const passwordHash = await hashPassword(data.password);
@@ -186,4 +193,22 @@ export const getProfile = async (userId: string): Promise<AuthUserPayload> => {
     isRoot: user.isRoot,
     createdAt: user.createdAt,
   };
+};
+
+export const resetPassword = async (email: string, newPassword: string): Promise<void> => {
+  const user = await authRepository.findByEmail(email);
+  if (!user) {
+    throw new ApiError(HTTP_STATUS.NOT_FOUND, 'User not found');
+  }
+
+  const validation = validatePasswordAgainstPolicy(newPassword);
+  if (!validation.isValid) {
+    throw new ApiError(HTTP_STATUS.BAD_REQUEST, validation.errors.join('. '));
+  }
+
+  const passwordHash = await hashPassword(newPassword);
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { passwordHash },
+  });
 };
