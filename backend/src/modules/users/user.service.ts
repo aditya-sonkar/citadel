@@ -34,15 +34,19 @@ export const getFriendlyPolicyName = (dbName: string, type: string) => {
 // --- Standard User profile operations ---
 
 export const getUserProfile = async (userId: string) => {
-  const user = await userRepository.findById(userId);
+  const user = await userRepository.findUserByIdWithDetails(userId);
 
   if (!user) {
     throw new ApiError(HTTP_STATUS.NOT_FOUND, 'User not found');
   }
 
-  // Remove Password Hash for security
-  const { passwordHash, ...safeUser } = user;
-  return safeUser;
+  // Remove Password Hash for security and map relations for frontend representation
+  const { passwordHash, memberships, boundary, ...safeUser } = user;
+  return {
+    ...safeUser,
+    groups: memberships.map((m) => m.group),
+    boundary: boundary ? boundary.policy : null,
+  };
 };
 
 export const UpdateUserProfile = async (userId: string, data: { name?: string }) => {
