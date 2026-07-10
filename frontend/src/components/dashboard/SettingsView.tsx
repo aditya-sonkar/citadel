@@ -19,7 +19,7 @@ const SettingsView: React.FC<SettingsViewProps> = ({ userEmail, isRoot }) => {
     enableExpiration: false,
     preventReuse: 5,
   });
-  
+
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
 
@@ -123,7 +123,7 @@ const SettingsView: React.FC<SettingsViewProps> = ({ userEmail, isRoot }) => {
 
   return (
     <div className="flex flex-col gap-6 w-full animate-fade-in p-6 md:p-10 pb-20">
-      
+
       {/* Header */}
       <div className="flex justify-between items-start">
         <div>
@@ -201,9 +201,9 @@ const SettingsView: React.FC<SettingsViewProps> = ({ userEmail, isRoot }) => {
             Edit Policy
           </button>
         </div>
-        
+
         <div className="p-0">
-           <table className="w-full text-left border-collapse">
+          <table className="w-full text-left border-collapse">
             <tbody>
               <tr className="border-b border-zinc-200 dark:border-zinc-800/60">
                 <td className="py-3 px-6 text-[12px] font-medium text-zinc-500 dark:text-zinc-400 w-2/3">Minimum password length</td>

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../components/landing/Navbar';
 import Hero from '../components/landing/Hero';
 import WhyCitadel from '../components/landing/WhyCitadel';
-import Platform from '../components/landing/Platform';
 import UseCases from '../components/landing/UseCases';
 import FAQ from '../components/landing/FAQ';
 import CTA from '../components/landing/CTA';
@@ -54,9 +53,6 @@ const LandingPage: React.FC = () => {
         </div>
         <div id="what-we-do" data-section-name="WHAT WE DO">
           <WhyCitadel />
-        </div>
-        <div data-section-name="PLATFORM CORE">
-          <Platform />
         </div>
         <div id="use-cases" data-section-name="USE CASES">
           <UseCases />

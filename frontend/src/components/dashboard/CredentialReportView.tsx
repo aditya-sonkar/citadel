@@ -82,7 +82,7 @@ const CredentialReportView: React.FC<CredentialReportViewProps> = ({ isRoot }) =
             Generate and download a credential report that lists all users in your account and the status of their various credentials.
           </p>
         </div>
-        <button 
+        <button
           onClick={handleDownload}
           disabled={downloading || rows.length === 0}
           className="px-3 py-1.5 text-[12px] font-medium bg-zinc-900 dark:bg-white hover:bg-zinc-800 dark:hover:bg-zinc-100 text-white dark:text-black rounded-md transition-colors shadow-sm font-semibold disabled:opacity-50 flex items-center gap-2"
@@ -125,11 +125,10 @@ const CredentialReportView: React.FC<CredentialReportViewProps> = ({ isRoot }) =
                 <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-900/30 transition-colors">
                   <td className="py-2.5 px-4 font-mono font-medium text-zinc-900 dark:text-white">{row.email}</td>
                   <td className="py-2.5 px-4 text-center">
-                    <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium border ${
-                      row.mfaEnabled 
-                        ? 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800/50' 
+                    <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium border ${row.mfaEnabled
+                        ? 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800/50'
                         : 'bg-amber-50 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800/50'
-                    }`}>
+                      }`}>
                       {row.mfaEnabled ? 'Active' : 'Not configured'}
                     </span>
                   </td>

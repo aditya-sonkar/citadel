@@ -10,7 +10,7 @@ interface PolicySimulatorProps {
 const PolicySimulator: React.FC<PolicySimulatorProps> = ({ isRoot }) => {
   const { data: users, isError, isLoading } = useUsers();
   const evaluateMutation = useEvaluate();
-  
+
   const [selectedUserId, setSelectedUserId] = useState('');
   const [action, setAction] = useState('');
   const [resource, setResource] = useState('*');
@@ -48,7 +48,7 @@ const PolicySimulator: React.FC<PolicySimulatorProps> = ({ isRoot }) => {
   // Convert flat evaluation path into structured tree representation
   const renderEvaluationTree = (decision: string, path: string[], matched: string) => {
     const isAllowed = decision === 'ALLOW_MATCH' || decision === 'ROOT_BYPASS';
-    
+
     // Parse individual path statements to find status
     const isRoot = decision === 'ROOT_BYPASS';
     const isExplicitDeny = decision === 'EXPLICIT_DENY';
@@ -64,7 +64,7 @@ const PolicySimulator: React.FC<PolicySimulatorProps> = ({ isRoot }) => {
               └─ {isRoot ? 'Bypass (User is Root)' : matched ? `${matched} (MATCH ALLOW)` : 'No matching statements found (DEFAULT DENY)'}
             </div>
           </div>
-          
+
           <div>├─ Permission Boundary Constraints</div>
           <div className="pl-6 border-l border-zinc-800 ml-2">
             <div>
@@ -85,7 +85,7 @@ const PolicySimulator: React.FC<PolicySimulatorProps> = ({ isRoot }) => {
 
   return (
     <div className="flex flex-col gap-6 w-full animate-fade-in p-6 md:p-10">
-      
+
       {/* Header */}
       <div>
         <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white flex items-center gap-2">
@@ -98,13 +98,13 @@ const PolicySimulator: React.FC<PolicySimulatorProps> = ({ isRoot }) => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        
+
         {/* Simulator Form */}
         <form onSubmit={handleEvaluate} className="flex flex-col gap-5 p-6 bg-white dark:bg-[#0a0a0a] border border-zinc-200 dark:border-zinc-800 rounded-lg">
-          
+
           <div className="flex flex-col gap-1.5">
             <label className="text-[12px] font-medium text-zinc-700 dark:text-zinc-300">Identity (User)</label>
-            <select 
+            <select
               required
               value={selectedUserId}
               onChange={e => setSelectedUserId(e.target.value)}
@@ -119,8 +119,8 @@ const PolicySimulator: React.FC<PolicySimulatorProps> = ({ isRoot }) => {
 
           <div className="flex flex-col gap-1.5">
             <label className="text-[12px] font-medium text-zinc-700 dark:text-zinc-300">Action</label>
-            <input 
-              type="text" 
+            <input
+              type="text"
               required
               value={action}
               onChange={e => setAction(e.target.value)}
@@ -131,8 +131,8 @@ const PolicySimulator: React.FC<PolicySimulatorProps> = ({ isRoot }) => {
 
           <div className="flex flex-col gap-1.5">
             <label className="text-[12px] font-medium text-zinc-700 dark:text-zinc-300">Resource ARN</label>
-            <input 
-              type="text" 
+            <input
+              type="text"
               required
               value={resource}
               onChange={e => setResource(e.target.value)}
@@ -141,8 +141,8 @@ const PolicySimulator: React.FC<PolicySimulatorProps> = ({ isRoot }) => {
             />
           </div>
 
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             disabled={evaluateMutation.isPending || !selectedUserId || !action || !resource}
             className="mt-2 h-[36px] px-4 text-[13px] font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors shadow-sm disabled:opacity-50 w-full"
           >
@@ -153,7 +153,7 @@ const PolicySimulator: React.FC<PolicySimulatorProps> = ({ isRoot }) => {
         {/* Results Panel */}
         <div className="flex flex-col gap-4">
           <h2 className="text-sm font-semibold text-zinc-900 dark:text-white">Simulation Results</h2>
-          
+
           {!evaluateMutation.data && !evaluateMutation.isError && !evaluateMutation.isPending && (
             <div className="flex-1 border border-dashed border-zinc-300 dark:border-zinc-700 rounded-lg flex flex-col items-center justify-center text-center p-6 bg-zinc-50/50 dark:bg-[#050505] min-h-[200px]">
               <p className="text-[12px] text-zinc-500">Run a simulation to see the evaluation tree path and decision model.</p>
@@ -168,20 +168,18 @@ const PolicySimulator: React.FC<PolicySimulatorProps> = ({ isRoot }) => {
 
           {evaluateMutation.data && (
             <div className="flex flex-col gap-4 animate-fade-in">
-              <div className={`p-4 border rounded-lg flex items-center justify-between ${
-                evaluateMutation.data.decision === 'ALLOW_MATCH' || evaluateMutation.data.decision === 'ROOT_BYPASS'
+              <div className={`p-4 border rounded-lg flex items-center justify-between ${evaluateMutation.data.decision === 'ALLOW_MATCH' || evaluateMutation.data.decision === 'ROOT_BYPASS'
                   ? 'bg-emerald-50 dark:bg-emerald-900/10 border-emerald-200 dark:border-emerald-800/50'
                   : 'bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-800/50'
-              }`}>
+                }`}>
                 <div className="flex flex-col">
                   <span className="text-[11px] uppercase font-bold tracking-wider text-zinc-500 mb-1">Decision</span>
-                  <span className={`text-lg font-bold ${
-                    evaluateMutation.data.decision === 'ALLOW_MATCH' || evaluateMutation.data.decision === 'ROOT_BYPASS'
-                      ? 'text-emerald-700 dark:text-emerald-400' 
+                  <span className={`text-lg font-bold ${evaluateMutation.data.decision === 'ALLOW_MATCH' || evaluateMutation.data.decision === 'ROOT_BYPASS'
+                      ? 'text-emerald-700 dark:text-emerald-400'
                       : 'text-red-700 dark:text-red-400'
-                  }`}>
-                    {evaluateMutation.data.decision === 'ALLOW_MATCH' ? 'ALLOWED' : 
-                     evaluateMutation.data.decision === 'ROOT_BYPASS' ? 'ALLOWED (ROOT)' : 'DENIED'}
+                    }`}>
+                    {evaluateMutation.data.decision === 'ALLOW_MATCH' ? 'ALLOWED' :
+                      evaluateMutation.data.decision === 'ROOT_BYPASS' ? 'ALLOWED (ROOT)' : 'DENIED'}
                   </span>
                 </div>
               </div>
@@ -196,8 +194,8 @@ const PolicySimulator: React.FC<PolicySimulatorProps> = ({ isRoot }) => {
                 <div>
                   <span className="text-[11px] uppercase font-bold tracking-wider text-zinc-500 block mb-2">Evaluation Decision Tree</span>
                   {renderEvaluationTree(
-                    evaluateMutation.data.decision, 
-                    evaluateMutation.data.evaluationPath || [], 
+                    evaluateMutation.data.decision,
+                    evaluateMutation.data.evaluationPath || [],
                     evaluateMutation.data.matchedPolicy || ''
                   )}
                 </div>

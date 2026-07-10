@@ -177,8 +177,8 @@ const UsersView: React.FC<UsersViewProps> = ({ setActiveTab, onUserClick, isRoot
                   </td>
                   <td className="py-2.5 px-4">
                     <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium border ${u.isMfaEnabled
-                        ? 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800/50'
-                        : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700'
+                      ? 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800/50'
+                      : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700'
                       }`}>
                       {u.isMfaEnabled ? 'Virtual MFA' : 'Not configured'}
                     </span>
@@ -187,7 +187,7 @@ const UsersView: React.FC<UsersViewProps> = ({ setActiveTab, onUserClick, isRoot
                     {new Date(u.createdAt).toLocaleDateString()}
                   </td>
                   <td className="py-2.5 px-4 text-right whitespace-nowrap">
-                    <button 
+                    <button
                       onClick={(e) => { e.stopPropagation(); handleUserClick(u.id); }}
                       disabled={u.isRoot && !isRoot}
                       title={u.isRoot && !isRoot ? "Root user cannot be managed by other users" : undefined}
@@ -249,13 +249,13 @@ const UsersView: React.FC<UsersViewProps> = ({ setActiveTab, onUserClick, isRoot
           </div>
 
           <div className="flex justify-end gap-2 border-t border-zinc-200 dark:border-zinc-800 pt-4">
-            <button 
+            <button
               onClick={() => { setDeleteTargets(null); setConfirmText(''); }}
               className="px-4 py-2 text-[12px] font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
             >
               Cancel
             </button>
-            <button 
+            <button
               onClick={async () => {
                 if (!deleteTargets) return;
                 try {

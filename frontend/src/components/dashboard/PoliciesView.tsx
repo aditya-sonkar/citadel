@@ -159,13 +159,13 @@ const PoliciesView: React.FC<PoliciesViewProps> = ({ isRoot }) => {
       setEditingPolicy(fullPolicy);
       setEditPolicyName(fullPolicy.name);
       setEditPolicyDesc(fullPolicy.description || '');
-      
+
       const parsed = fullPolicy.statements?.statements?.map((s: any) => ({
         effect: s.Effect || 'Allow',
         actions: s.Action || [],
         resource: Array.isArray(s.Resource) ? s.Resource[0] : s.Resource || '*'
       })) || [{ effect: 'Allow', actions: [], resource: '*' }];
-      
+
       setEditStatements(parsed);
       setEditError(null);
     } catch (err: any) {
@@ -387,11 +387,10 @@ const PoliciesView: React.FC<PoliciesViewProps> = ({ isRoot }) => {
                     {p.description || <span className="text-zinc-400 dark:text-zinc-600">No description</span>}
                   </td>
                   <td className="py-2.5 px-4 text-[12px] text-zinc-500 dark:text-zinc-400 text-center">
-                    <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium border ${
-                      p.type === 'MANAGED'
+                    <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium border ${p.type === 'MANAGED'
                         ? 'bg-zinc-50 dark:bg-zinc-900/60 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-800'
                         : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-650 dark:text-zinc-450 border-zinc-200 dark:border-zinc-700'
-                    }`}>
+                      }`}>
                       {p.type}
                     </span>
                   </td>
@@ -399,7 +398,7 @@ const PoliciesView: React.FC<PoliciesViewProps> = ({ isRoot }) => {
                     {new Date(p.createdAt).toLocaleDateString()}
                   </td>
                   <td className="py-2.5 px-4 text-right whitespace-nowrap">
-                    <button 
+                    <button
                       onClick={(e) => { e.stopPropagation(); handleOpenEditModal(p); }}
                       className="text-[11px] font-semibold px-2.5 py-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 rounded hover:bg-zinc-200 dark:hover:bg-zinc-700 border border-zinc-200 dark:border-zinc-700/50 transition-colors"
                     >
@@ -416,7 +415,7 @@ const PoliciesView: React.FC<PoliciesViewProps> = ({ isRoot }) => {
       {/* Create Policy Modal */}
       <Modal isOpen={isCreateModalOpen} onClose={() => { setIsCreateModalOpen(false); setCreateError(null); }} title="Create Policy">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full items-stretch">
-          
+
           {/* Left Column: Form Builder */}
           {/* Left Column: Form Builder */}
           <form onSubmit={handleCreatePolicySubmit} className="lg:col-span-7 flex flex-col max-h-[68vh]">
@@ -461,8 +460,8 @@ const PoliciesView: React.FC<PoliciesViewProps> = ({ isRoot }) => {
                 </div>
 
                 {statements.map((s, idx) => (
-                  <div 
-                    key={idx} 
+                  <div
+                    key={idx}
                     className="bg-zinc-50 dark:bg-zinc-900/30 p-4 rounded-md border border-zinc-200 dark:border-zinc-800 flex flex-col gap-4"
                   >
                     <div className="flex justify-between items-center">
@@ -485,22 +484,20 @@ const PoliciesView: React.FC<PoliciesViewProps> = ({ isRoot }) => {
                         <button
                           type="button"
                           onClick={() => updateStatement(idx, 'effect', 'Allow')}
-                          className={`px-3 py-1.5 text-[11px] font-semibold rounded transition-colors ${
-                            s.effect === 'Allow'
+                          className={`px-3 py-1.5 text-[11px] font-semibold rounded transition-colors ${s.effect === 'Allow'
                               ? 'bg-emerald-600 text-white'
                               : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-650 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-750'
-                          }`}
+                            }`}
                         >
                           ALLOW
                         </button>
                         <button
                           type="button"
                           onClick={() => updateStatement(idx, 'effect', 'Deny')}
-                          className={`px-3 py-1.5 text-[11px] font-semibold rounded transition-colors ${
-                            s.effect === 'Deny'
+                          className={`px-3 py-1.5 text-[11px] font-semibold rounded transition-colors ${s.effect === 'Deny'
                               ? 'bg-rose-600 text-white'
                               : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-650 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-750'
-                          }`}
+                            }`}
                         >
                           DENY
                         </button>
@@ -544,11 +541,10 @@ const PoliciesView: React.FC<PoliciesViewProps> = ({ isRoot }) => {
                               key={act}
                               type="button"
                               onClick={() => toggleActionInStatement(idx, act)}
-                              className={`px-2 py-0.5 text-[10px] font-mono rounded border transition-colors ${
-                                isSelected
+                              className={`px-2 py-0.5 text-[10px] font-mono rounded border transition-colors ${isSelected
                                   ? 'bg-blue-500/10 border-blue-500 text-blue-600 dark:text-blue-400'
                                   : 'bg-white dark:bg-[#0a0a0a] border-zinc-200 dark:border-zinc-800 text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'
-                              }`}
+                                }`}
                             >
                               {act}
                             </button>
@@ -578,14 +574,14 @@ const PoliciesView: React.FC<PoliciesViewProps> = ({ isRoot }) => {
             </div>
 
             <div className="flex justify-end gap-2 border-t border-zinc-200 dark:border-zinc-800 pt-4 mt-2 shrink-0 bg-white dark:bg-[#050505]">
-              <button 
+              <button
                 type="button"
                 onClick={() => { setIsCreateModalOpen(false); setCreateError(null); }}
                 className="px-4 py-2 text-[12px] font-medium text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors"
               >
                 Cancel
               </button>
-              <button 
+              <button
                 type="submit"
                 disabled={isCreating}
                 className="px-4 py-2 text-[12px] font-medium bg-zinc-900 dark:bg-white text-white dark:text-black rounded-md hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors shadow-sm disabled:opacity-40"
@@ -618,7 +614,7 @@ const PoliciesView: React.FC<PoliciesViewProps> = ({ isRoot }) => {
       {/* Manage Policy Modal */}
       <Modal isOpen={!!editingPolicy} onClose={() => setEditingPolicy(null)} title={`Manage Policy: ${editingPolicy?.name}`}>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full items-stretch">
-          
+
           {/* Left Column: Form Builder */}
           {/* Left Column: Form Builder */}
           <form onSubmit={handleUpdatePolicySubmit} className="lg:col-span-7 flex flex-col max-h-[68vh]">
@@ -628,7 +624,7 @@ const PoliciesView: React.FC<PoliciesViewProps> = ({ isRoot }) => {
                   {editError}
                 </p>
               )}
-              
+
               {editingPolicy?.type === 'AWS_MANAGE' && (
                 <p className="text-[11px] text-yellow-600 bg-yellow-500/10 border border-yellow-500/20 p-2 rounded-md font-medium shrink-0">
                   Warning: This is a system policy. Editing may impact core system permissions.
@@ -668,8 +664,8 @@ const PoliciesView: React.FC<PoliciesViewProps> = ({ isRoot }) => {
                 </div>
 
                 {editStatements.map((s, idx) => (
-                  <div 
-                    key={idx} 
+                  <div
+                    key={idx}
                     className="bg-zinc-50 dark:bg-zinc-900/30 p-4 rounded-md border border-zinc-200 dark:border-zinc-800 flex flex-col gap-4"
                   >
                     <div className="flex justify-between items-center">
@@ -692,22 +688,20 @@ const PoliciesView: React.FC<PoliciesViewProps> = ({ isRoot }) => {
                         <button
                           type="button"
                           onClick={() => updateEditStatement(idx, 'effect', 'Allow')}
-                          className={`px-3 py-1.5 text-[11px] font-semibold rounded transition-colors ${
-                            s.effect === 'Allow'
+                          className={`px-3 py-1.5 text-[11px] font-semibold rounded transition-colors ${s.effect === 'Allow'
                               ? 'bg-emerald-600 text-white'
                               : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-650 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-750'
-                          }`}
+                            }`}
                         >
                           ALLOW
                         </button>
                         <button
                           type="button"
                           onClick={() => updateEditStatement(idx, 'effect', 'Deny')}
-                          className={`px-3 py-1.5 text-[11px] font-semibold rounded transition-colors ${
-                            s.effect === 'Deny'
+                          className={`px-3 py-1.5 text-[11px] font-semibold rounded transition-colors ${s.effect === 'Deny'
                               ? 'bg-rose-600 text-white'
                               : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-650 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-750'
-                          }`}
+                            }`}
                         >
                           DENY
                         </button>
@@ -751,11 +745,10 @@ const PoliciesView: React.FC<PoliciesViewProps> = ({ isRoot }) => {
                               key={act}
                               type="button"
                               onClick={() => toggleActionInEditStatement(idx, act)}
-                              className={`px-2 py-0.5 text-[10px] font-mono rounded border transition-colors ${
-                                isSelected
+                              className={`px-2 py-0.5 text-[10px] font-mono rounded border transition-colors ${isSelected
                                   ? 'bg-blue-500/10 border-blue-500 text-blue-600 dark:text-blue-400'
                                   : 'bg-white dark:bg-[#0a0a0a] border-zinc-200 dark:border-zinc-800 text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'
-                              }`}
+                                }`}
                             >
                               {act}
                             </button>
@@ -785,14 +778,14 @@ const PoliciesView: React.FC<PoliciesViewProps> = ({ isRoot }) => {
             </div>
 
             <div className="flex justify-end gap-2 border-t border-zinc-200 dark:border-zinc-800 pt-4 mt-2 shrink-0 bg-white dark:bg-[#050505]">
-              <button 
+              <button
                 type="button"
                 onClick={() => setEditingPolicy(null)}
                 className="px-4 py-2 text-[12px] font-medium text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors"
               >
                 Cancel
               </button>
-              <button 
+              <button
                 type="submit"
                 disabled={isUpdating}
                 className="px-4 py-2 text-[12px] font-medium bg-zinc-900 dark:bg-white text-white dark:text-black rounded-md hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors shadow-sm disabled:opacity-40"
@@ -864,14 +857,14 @@ const PoliciesView: React.FC<PoliciesViewProps> = ({ isRoot }) => {
             />
           </div>
           <div className="flex justify-end gap-2 border-t border-zinc-200 dark:border-zinc-800 pt-4">
-            <button 
+            <button
               type="button"
               onClick={() => { setDeleteTargets(null); setConfirmText(''); }}
               className="px-4 py-2 text-[12px] font-medium text-zinc-650 dark:text-zinc-455 hover:text-zinc-900 dark:hover:text-white transition-colors"
             >
               Cancel
             </button>
-            <button 
+            <button
               onClick={async () => {
                 if (!deleteTargets) return;
                 try {

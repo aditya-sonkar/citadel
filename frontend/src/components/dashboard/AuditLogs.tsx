@@ -41,7 +41,7 @@ const AuditLogs: React.FC<AuditLogsProps> = ({ isRoot }) => {
 
   return (
     <div className="flex flex-col gap-6 w-full animate-fade-in p-6 md:p-10">
-      
+
       {/* Header */}
       <div className="flex justify-between items-start">
         <div>
@@ -56,9 +56,9 @@ const AuditLogs: React.FC<AuditLogsProps> = ({ isRoot }) => {
 
       {/* Toolbar */}
       <div className="flex gap-2 mb-2">
-        <input 
-          type="text" 
-          placeholder="Filter by action, user, or decision..." 
+        <input
+          type="text"
+          placeholder="Filter by action, user, or decision..."
           className="w-full max-w-[400px] h-[32px] px-3 text-[12px] bg-white dark:bg-[#0a0a0a] border border-zinc-200 dark:border-zinc-800 rounded-md text-zinc-900 dark:text-white placeholder-zinc-400 focus:outline-none focus:border-zinc-400 dark:focus:border-zinc-600 transition-colors"
         />
         <button className="h-[32px] px-3 border border-zinc-200 dark:border-zinc-800 rounded-md text-[12px] font-medium text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-900 bg-white dark:bg-[#0a0a0a] transition-colors">

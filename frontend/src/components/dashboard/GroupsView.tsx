@@ -19,7 +19,7 @@ const GroupsView: React.FC<GroupsViewProps> = ({ setActiveTab, onGroupClick, isR
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [deleteTargets, setDeleteTargets] = useState<{ id: string; name: string }[] | null>(null);
   const [confirmText, setConfirmText] = useState('');
-  
+
   // Create Group states
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [newGroupName, setNewGroupName] = useState('');
@@ -199,7 +199,7 @@ const GroupsView: React.FC<GroupsViewProps> = ({ setActiveTab, onGroupClick, isR
                     {new Date(g.createdAt).toLocaleDateString()}
                   </td>
                   <td className="py-2.5 px-4 text-right whitespace-nowrap">
-                    <button 
+                    <button
                       onClick={(e) => { e.stopPropagation(); handleGroupClick(g.id); }}
                       className="text-[11px] font-semibold px-2.5 py-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 rounded hover:bg-zinc-200 dark:hover:bg-zinc-700 border border-zinc-200 dark:border-zinc-700/50 transition-colors"
                     >
@@ -243,14 +243,14 @@ const GroupsView: React.FC<GroupsViewProps> = ({ setActiveTab, onGroupClick, isR
             />
           </div>
           <div className="flex justify-end gap-2 border-t border-zinc-200 dark:border-zinc-800 pt-4 mt-2">
-            <button 
+            <button
               type="button"
               onClick={() => { setIsCreateModalOpen(false); setCreateError(null); }}
               className="px-4 py-2 text-[12px] font-medium text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors"
             >
               Cancel
             </button>
-            <button 
+            <button
               type="submit"
               disabled={isCreating}
               className="px-4 py-2 text-[12px] font-medium bg-zinc-900 dark:bg-white text-white dark:text-black rounded-md hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors shadow-sm disabled:opacity-40"
@@ -284,14 +284,14 @@ const GroupsView: React.FC<GroupsViewProps> = ({ setActiveTab, onGroupClick, isR
             />
           </div>
           <div className="flex justify-end gap-2 border-t border-zinc-200 dark:border-zinc-800 pt-4">
-            <button 
+            <button
               type="button"
               onClick={() => { setDeleteTargets(null); setConfirmText(''); }}
               className="px-4 py-2 text-[12px] font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
             >
               Cancel
             </button>
-            <button 
+            <button
               onClick={async () => {
                 if (!deleteTargets) return;
                 try {
