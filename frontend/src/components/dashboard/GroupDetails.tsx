@@ -516,7 +516,7 @@ const GroupDetails: React.FC<GroupDetailsProps> = ({ setActiveTab, groupId }) =>
       {/* Attach Policy Modal */}
       <Modal isOpen={isAttachDrawerOpen} onClose={() => setIsAttachDrawerOpen(false)} title="Attach Policy to Group">
         <form onSubmit={handleAttachPolicy} className="flex flex-col h-full">
-          <div className="flex-grow flex flex-col gap-1.5 pb-[160px]">
+          <div className="flex-grow flex flex-col gap-1.5 min-h-[240px]">
             <label className="text-[12px] font-medium text-zinc-700 dark:text-zinc-300">Select Identity Policies</label>
             <SearchableMultiSelect
               options={policies?.map((p: any) => ({ id: p.id, name: p.name })) || []}
@@ -549,7 +549,7 @@ const GroupDetails: React.FC<GroupDetailsProps> = ({ setActiveTab, groupId }) =>
       {/* Add Member Modal */}
       <Modal isOpen={isMemberDrawerOpen} onClose={() => setIsMemberDrawerOpen(false)} title="Add Users to Group">
         <form onSubmit={handleAddMember} className="flex flex-col h-full">
-          <div className="flex-grow flex flex-col gap-1.5 pb-[160px]">
+          <div className="flex-grow flex flex-col gap-1.5 min-h-[240px]">
             <label className="text-[12px] font-medium text-zinc-700 dark:text-zinc-300">Select Users</label>
             <SearchableMultiSelect
               options={allUsers?.map((u: any) => ({ id: u.id, name: u.name || u.email })) || []}
