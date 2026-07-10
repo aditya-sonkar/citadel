@@ -44,19 +44,19 @@ const Hero: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
-              className="flex flex-wrap gap-4 mt-8"
+              className="flex w-full sm:w-auto gap-2 sm:gap-4 mt-8"
             >
               <Link
                 to="/login"
-                className="group flex items-center gap-2 px-6 py-3.5 border border-black/20 dark:border-white/[0.15] text-[10px] font-mono tracking-[0.18em] text-black dark:text-white uppercase hover:bg-white hover:text-black dark:hover:bg-white dark:hover:text-black transition-all"
+                className="group flex items-center justify-center flex-1 gap-1 sm:gap-2 px-2 sm:px-6 py-3.5 border border-black/20 dark:border-white/[0.15] text-[8px] sm:text-[10px] font-mono tracking-[0.1em] sm:tracking-[0.18em] text-black dark:text-white uppercase hover:bg-white hover:text-black dark:hover:bg-white dark:hover:text-black transition-all text-center"
               >
-                LAUNCH CONSOLE ↗
+                LAUNCH CONSOLE <span className="hidden sm:inline">↗</span>
               </Link>
               <a
                 href="#faq"
-                className="group flex items-center gap-2 px-6 py-3.5 border border-black/20 dark:border-white/[0.15] text-[10px] font-mono tracking-[0.18em] text-black dark:text-white uppercase hover:bg-white hover:text-black dark:hover:bg-white dark:hover:text-black transition-all"
+                className="group flex items-center justify-center flex-1 gap-1 sm:gap-2 px-2 sm:px-6 py-3.5 border border-black/20 dark:border-white/[0.15] text-[8px] sm:text-[10px] font-mono tracking-[0.1em] sm:tracking-[0.18em] text-black dark:text-white uppercase hover:bg-white hover:text-black dark:hover:bg-white dark:hover:text-black transition-all text-center"
               >
-                EXPLORE FEATURES ↗
+                EXPLORE FEATURES <span className="hidden sm:inline">↗</span>
               </a>
             </motion.div>
           </div>

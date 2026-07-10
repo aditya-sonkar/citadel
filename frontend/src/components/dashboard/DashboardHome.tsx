@@ -52,10 +52,10 @@ const DashboardHome: React.FC<DashboardHomeProps> = ({ isAdmin, setActiveTab }) 
           <button
             key={m.label}
             onClick={() => setActiveTab(m.tab)}
-            className="flex flex-col items-start gap-1 p-5 bg-white dark:bg-[#0a0a0a] border border-zinc-200 dark:border-zinc-800 rounded-lg text-left hover:border-zinc-300 dark:hover:border-zinc-700 transition-all group"
+            className="flex flex-col items-start justify-between p-5 bg-white dark:bg-[#0a0a0a] border border-zinc-200 dark:border-zinc-800 rounded-lg text-left hover:border-zinc-300 dark:hover:border-zinc-700 transition-all group min-h-[110px] w-full"
           >
-            <span className="text-[11px] font-semibold text-zinc-500 uppercase tracking-wider">{m.label}</span>
-            <span className="text-2xl font-bold text-zinc-950 dark:text-white mt-1">{m.count}</span>
+            <span className="text-[11px] font-semibold text-zinc-500 uppercase tracking-wider pr-2 leading-snug">{m.label}</span>
+            <span className="text-2xl font-bold text-zinc-950 dark:text-white mt-3">{m.count}</span>
           </button>
         ))}
       </div>

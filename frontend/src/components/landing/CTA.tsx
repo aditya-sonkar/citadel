@@ -50,20 +50,20 @@ const CTA: React.FC = () => {
               We'll make it bulletproof.
             </p>
 
-            <div className="flex flex-wrap gap-4">
+            <div className="flex w-full sm:w-auto gap-2 sm:gap-4">
               <Link
                 to="/login"
-                className="group flex items-center gap-2 px-6 py-3.5 border border-black/20 dark:border-white/[0.15] text-[10px] font-mono tracking-[0.18em] text-black/80 dark:text-white/70 uppercase hover:text-black dark:hover:text-white hover:border-black/50 dark:hover:border-white/40 transition-all"
+                className="group flex items-center justify-center flex-1 gap-1 sm:gap-2 px-2 sm:px-6 py-3.5 border border-black/20 dark:border-white/[0.15] text-[8px] sm:text-[10px] font-mono tracking-[0.1em] sm:tracking-[0.18em] text-black/80 dark:text-white/70 uppercase hover:text-black dark:hover:text-white hover:border-black/50 dark:hover:border-white/40 transition-all text-center"
               >
                 LAUNCH CONSOLE
-                <span className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
+                <span className="hidden sm:inline transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
               </Link>
               <a
                 href="#faq"
-                className="group flex items-center gap-2 px-6 py-3.5 border border-black/20 dark:border-white/[0.15] text-[10px] font-mono tracking-[0.18em] text-black/80 dark:text-white/70 uppercase hover:text-black dark:hover:text-white hover:border-black/50 dark:hover:border-white/40 transition-all"
+                className="group flex items-center justify-center flex-1 gap-1 sm:gap-2 px-2 sm:px-6 py-3.5 border border-black/20 dark:border-white/[0.15] text-[8px] sm:text-[10px] font-mono tracking-[0.1em] sm:tracking-[0.18em] text-black/80 dark:text-white/70 uppercase hover:text-black dark:hover:text-white hover:border-black/50 dark:hover:border-white/40 transition-all text-center"
               >
                 EXPLORE FEATURES
-                <span className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
+                <span className="hidden sm:inline transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
               </a>
             </div>
           </div>
