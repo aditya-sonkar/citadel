@@ -31,7 +31,10 @@ const DEFAULT_SETTINGS: Settings = {
   },
 };
 
+let memorySettings: Settings | null = null;
+
 export const getSettings = (): Settings => {
+  if (memorySettings) return memorySettings;
   try {
     if (!fs.existsSync(SETTINGS_FILE)) {
       const dir = path.dirname(SETTINGS_FILE);
@@ -60,11 +63,16 @@ export const saveSettings = (settings: Partial<Settings>): Settings => {
         ...settings.passwordPolicy,
       },
     };
-    const dir = path.dirname(SETTINGS_FILE);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
+    try {
+      const dir = path.dirname(SETTINGS_FILE);
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+      }
+      fs.writeFileSync(SETTINGS_FILE, JSON.stringify(updated, null, 2));
+    } catch (fsError) {
+      console.warn('Could not write to file system. Falling back to memory storage.');
+      memorySettings = updated;
     }
-    fs.writeFileSync(SETTINGS_FILE, JSON.stringify(updated, null, 2));
     return updated;
   } catch (error) {
     console.error('Error saving settings file', error);
