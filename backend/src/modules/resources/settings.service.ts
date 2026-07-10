@@ -52,7 +52,7 @@ export const getSettings = (): Settings => {
   }
 };
 
-export const saveSettings = (settings: Partial<Settings>): Settings => {
+export const saveSettings = (settings: Partial<Settings> = {}): Settings => {
   try {
     const current = getSettings();
     const updated = {
@@ -60,7 +60,7 @@ export const saveSettings = (settings: Partial<Settings>): Settings => {
       ...settings,
       passwordPolicy: {
         ...current.passwordPolicy,
-        ...settings.passwordPolicy,
+        ...(settings?.passwordPolicy || {}),
       },
     };
     try {
