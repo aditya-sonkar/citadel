@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useLenis } from 'lenis/react';
 
 interface NavbarProps {
   isLoggedIn: boolean;
@@ -10,6 +11,7 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, activeSection = 'SECURE YOUR PERIMETER' }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [theme, setTheme] = useState('dark');
+  const lenis = useLenis();
 
   useEffect(() => {
     const isDark = document.documentElement.classList.contains('dark');
@@ -19,13 +21,16 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, activeSection = 'SECURE YOU
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      lenis?.stop();
     } else {
       document.body.style.overflow = 'unset';
+      lenis?.start();
     }
     return () => {
       document.body.style.overflow = 'unset';
+      lenis?.start();
     };
-  }, [isOpen]);
+  }, [isOpen, lenis]);
 
   const toggleTheme = () => {
     if (theme === 'dark') {
@@ -39,9 +44,14 @@ const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, activeSection = 'SECURE YOU
 
   const scrollToSection = (id: string) => {
     setIsOpen(false);
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+    if (lenis) {
+      lenis.start();
+      lenis.scrollTo(`#${id}`);
+    } else {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
 

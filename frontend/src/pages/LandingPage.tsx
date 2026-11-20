@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { ReactLenis } from 'lenis/react';
+import 'lenis/dist/lenis.css';
 import Navbar from '../components/landing/Navbar';
 import Hero from '../components/landing/Hero';
 import WhyCitadel from '../components/landing/WhyCitadel';
@@ -38,34 +40,47 @@ const LandingPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-full min-h-screen bg-transparent text-zinc-900 dark:text-white font-display select-none antialiased relative">
-      
-      {/* ── Global Animated Background ── */}
-      <Background />
+    <ReactLenis
+      root
+      options={{
+        autoRaf: true,
+        anchors: true,
+        lerp: 0.1,
+        duration: 1.2,
+        smoothWheel: true,
+        wheelMultiplier: 1,
+        touchMultiplier: 1.5,
+      }}
+    >
+      <div className="w-full min-h-screen bg-transparent text-zinc-900 dark:text-white font-display select-none antialiased relative">
+        
+        {/* ── Global Animated Background ── */}
+        <Background />
 
-      {/* ── Fixed Navbar ── */}
-      <Navbar isLoggedIn={isLoggedIn} activeSection={activeSection} />
+        {/* ── Fixed Navbar ── */}
+        <Navbar isLoggedIn={isLoggedIn} activeSection={activeSection} />
 
-      {/* ── Main Content ── */}
-      <main className="relative z-10 w-full flex flex-col">
-        <div id="hero" data-section-name="SECURE YOUR PERIMETER">
-          <Hero />
-        </div>
-        <div id="what-we-do" data-section-name="WHAT WE DO">
-          <WhyCitadel />
-        </div>
-        <div id="use-cases" data-section-name="USE CASES">
-          <UseCases />
-        </div>
-        <div id="faq" data-section-name="KNOWLEDGE BASE">
-          <FAQ />
-        </div>
-        <div id="cta" data-section-name="GET STARTED">
-          <CTA />
-        </div>
-        <Footer />
-      </main>
-    </div>
+        {/* ── Main Content ── */}
+        <main className="relative z-10 w-full flex flex-col">
+          <div id="hero" data-section-name="SECURE YOUR PERIMETER">
+            <Hero />
+          </div>
+          <div id="what-we-do" data-section-name="WHAT WE DO">
+            <WhyCitadel />
+          </div>
+          <div id="use-cases" data-section-name="USE CASES">
+            <UseCases />
+          </div>
+          <div id="faq" data-section-name="KNOWLEDGE BASE">
+            <FAQ />
+          </div>
+          <div id="cta" data-section-name="GET STARTED">
+            <CTA />
+          </div>
+          <Footer />
+        </main>
+      </div>
+    </ReactLenis>
   );
 };
 
